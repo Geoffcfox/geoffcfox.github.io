@@ -119,7 +119,7 @@ function startParticles() {
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
   const material = new THREE.PointsMaterial({
-    color: 0x9bb6ff,
+    color: 0xf0c8a0,
     size: 0.035,
     transparent: true,
     opacity: 0.62,
