@@ -1,0 +1,436 @@
+/* Shared behavior for every page: nav, transitions, lightbox, renderers. */
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function setMeta(attr, key, value) {
+  let el = document.head.querySelector(`meta[${attr}="${key}"]`);
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute(attr, key);
+    document.head.appendChild(el);
+  }
+  el.setAttribute("content", value);
+}
+
+function applyAbsoluteUrls() {
+  const base = String((window.SITE && SITE.url) || "").replace(/\/$/, "");
+  if (!base) return;
+  const file = (location.pathname.split("/").pop() || "index.html");
+  const path = file === "index.html" || file === "" ? "/" : `/${file}`;
+  const href = base + path + (location.search || "");
+  let link = document.head.querySelector('link[rel="canonical"]');
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "canonical";
+    document.head.appendChild(link);
+  }
+  link.href = href;
+  setMeta("property", "og:url", href);
+  setMeta("property", "og:image", `${base}/assets/og-image.png`);
+  setMeta("name", "twitter:image", `${base}/assets/og-image.png`);
+}
+
+function initYear() {
+  document.querySelectorAll("[data-year]").forEach((el) => {
+    el.textContent = String(new Date().getFullYear());
+  });
+}
+
+function initNav() {
+  const nav = document.querySelector(".mast__nav");
+  const toggle = document.querySelector(".mast__toggle");
+  if (!nav || !toggle) return;
+  const links = [...nav.querySelectorAll(".mast__list a")];
+  const close = () => {
+    nav.classList.remove("is-open");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-label", "Open menu");
+    document.body.style.overflow = "";
+  };
+  toggle.addEventListener("click", () => {
+    const open = !nav.classList.contains("is-open");
+    nav.classList.toggle("is-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    document.body.style.overflow = open ? "hidden" : "";
+    if (open) links[0]?.focus();
+  });
+  links.forEach((a) => a.addEventListener("click", close));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && nav.classList.contains("is-open")) close();
+  });
+}
+
+function initTransitions() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  document.addEventListener("click", (event) => {
+    const a = event.target.closest("a");
+    if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
+    const href = a.getAttribute("href");
+    if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) return;
+    let url;
+    try { url = new URL(a.href, location.href); } catch { return; }
+    if (url.origin !== location.origin) return;
+    if (url.pathname === location.pathname && url.hash) return;
+    event.preventDefault();
+    document.documentElement.classList.add("is-leaving");
+    setTimeout(() => { location.href = url.href; }, 180);
+  });
+}
+
+function initReveal() {
+  const nodes = document.querySelectorAll(".reveal");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    nodes.forEach((n) => n.classList.add("is-visible"));
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+  nodes.forEach((node, i) => {
+    node.style.transitionDelay = `${(i % 8) * 40}ms`;
+    observer.observe(node);
+  });
+}
+
+function pieceMarkup(item, extra = "") {
+  const href = `project.html?id=${encodeURIComponent(item.id)}`;
+  const note = item.confidential ? `<p class="piece__note">Confidential</p>` : "";
+  return `
+    <a class="piece reveal ${extra}" href="${href}" data-open="${item.id}">
+      <div class="piece__frame">
+        <img src="${WORK_DIR}${encodeURIComponent(item.file)}" alt="${escapeHtml(item.alt || item.title)}" loading="lazy">
+      </div>
+      <div class="piece__label">
+        ${note}
+        <h3>${escapeHtml(item.title)}</h3>
+        <p>${escapeHtml(item.meta || "")}</p>
+      </div>
+    </a>
+  `;
+}
+
+const lightbox = {
+  el: null, dialog: null, media: null, setEl: null, title: null, desc: null,
+  lastFocus: null, list: [], index: 0, open: false
+};
+
+function currentList() {
+  return lightbox.list.length ? lightbox.list : (window.WORK || []);
+}
+
+function renderLightbox() {
+  const item = currentList()[lightbox.index];
+  if (!item || !lightbox.el) return;
+  const isPhoto = item.kind === "photo";
+  const dir = isPhoto ? PHOTO_DIR : WORK_DIR;
+  const setLabel = isPhoto ? "Photography" : ((window.SET_LABEL && SET_LABEL[item.set]) || item.set || "");
+  lightbox.setEl.textContent = setLabel + (item.confidential ? " · Confidential" : "");
+  lightbox.title.textContent = item.title || "";
+  lightbox.desc.textContent = item.caption || item.meta || "";
+  const img = document.createElement("img");
+  img.src = dir + item.file;
+  img.alt = item.alt || item.title || "";
+  lightbox.media.replaceChildren(img);
+}
+
+function openLightboxFromList(list, id) {
+  lightbox.list = list;
+  const index = list.findIndex((item) => item.id === id);
+  if (index < 0) return;
+  lightbox.index = index;
+  lightbox.lastFocus = document.activeElement;
+  lightbox.el.hidden = false;
+  lightbox.open = true;
+  document.body.classList.add("lightbox-open");
+  renderLightbox();
+  lightbox.dialog.focus();
+}
+
+function closeLightbox() {
+  if (!lightbox.open) return;
+  lightbox.el.hidden = true;
+  lightbox.open = false;
+  document.body.classList.remove("lightbox-open");
+  if (lightbox.lastFocus && lightbox.lastFocus.focus) lightbox.lastFocus.focus();
+}
+
+function stepLightbox(delta) {
+  const list = currentList();
+  if (!list.length) return;
+  lightbox.index = (lightbox.index + delta + list.length) % list.length;
+  renderLightbox();
+}
+
+function initLightbox() {
+  lightbox.el = document.getElementById("lightbox");
+  if (!lightbox.el) return;
+  lightbox.dialog = lightbox.el.querySelector(".lightbox__dialog");
+  lightbox.media = document.getElementById("lightbox-media");
+  lightbox.setEl = document.getElementById("lightbox-set");
+  lightbox.title = document.getElementById("lightbox-title");
+  lightbox.desc = document.getElementById("lightbox-desc");
+
+  document.addEventListener("click", (event) => {
+    const open = event.target.closest("[data-open]");
+    if (open) {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const isPhoto = open.dataset.kind === "photo";
+      const list = isPhoto ? (window.PHOTOGRAPHY || []) : (window.WORK || []);
+      event.preventDefault();
+      openLightboxFromList(list, open.dataset.open);
+      return;
+    }
+    if (event.target.closest("[data-close]")) closeLightbox();
+    if (event.target.closest(".lightbox__prev")) stepLightbox(-1);
+    if (event.target.closest(".lightbox__next")) stepLightbox(1);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (!lightbox.open) return;
+    if (event.key === "Escape") { event.preventDefault(); closeLightbox(); }
+    else if (event.key === "ArrowLeft") { event.preventDefault(); stepLightbox(-1); }
+    else if (event.key === "ArrowRight") { event.preventDefault(); stepLightbox(1); }
+    else if (event.key === "Tab") {
+      const focusable = [...lightbox.dialog.querySelectorAll("button")];
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && (document.activeElement === first || document.activeElement === lightbox.dialog)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  });
+}
+
+function renderFeatured() {
+  const root = document.getElementById("featured-root");
+  if (!root) return;
+  const items = (window.WORK || []).filter((item) => item.home);
+  root.innerHTML = items.map((item) => pieceMarkup(item)).join("");
+}
+
+function activeSetFromUrl() {
+  const params = new URLSearchParams(location.search);
+  const raw = params.get("set") || (location.hash || "").replace(/^#/, "");
+  const known = (window.CATEGORIES || []).some((c) => c.id === raw);
+  return known ? raw : "all";
+}
+
+function renderWork() {
+  const root = document.getElementById("work-root");
+  const filters = document.getElementById("work-filters");
+  const blurb = document.getElementById("work-blurb");
+  if (!root || !filters) return;
+
+  const cats = window.CATEGORIES || [];
+  filters.innerHTML = [
+    `<button class="filter" type="button" data-set="all">All</button>`,
+    ...cats.map((c) => `<button class="filter" type="button" data-set="${c.id}">${escapeHtml(c.label)}</button>`)
+  ].join("");
+
+  function apply(set) {
+    const items = (window.WORK || []).filter((item) => set === "all" || item.set === set);
+    root.dataset.set = set;
+    root.innerHTML = items.map((item) => pieceMarkup(item)).join("");
+    filters.querySelectorAll(".filter").forEach((btn) => {
+      btn.classList.toggle("is-active", btn.dataset.set === set);
+    });
+    if (blurb) {
+      const cat = cats.find((c) => c.id === set);
+      blurb.textContent = cat ? cat.blurb : "Every piece here was built for a specific distance.";
+    }
+    const url = new URL(location.href);
+    if (set === "all") url.searchParams.delete("set");
+    else url.searchParams.set("set", set);
+    history.replaceState({}, "", url);
+    initReveal();
+  }
+
+  filters.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-set]");
+    if (btn) apply(btn.dataset.set);
+  });
+
+  apply(activeSetFromUrl());
+}
+
+function renderPhotography() {
+  const root = document.getElementById("photo-root");
+  const empty = document.getElementById("photo-empty");
+  if (!root) return;
+  const items = window.PHOTOGRAPHY || [];
+  if (!items.length) {
+    root.hidden = true;
+    if (empty) empty.hidden = false;
+    return;
+  }
+  if (empty) empty.hidden = true;
+  root.hidden = false;
+  root.innerHTML = items.map((item) => {
+    const aspect = item.aspect ? ` style="aspect-ratio:${escapeHtml(item.aspect)}"` : "";
+    return `
+      <button class="piece reveal" type="button" data-open="${item.id}" data-kind="photo" aria-label="Open ${escapeHtml(item.title || "photograph")}">
+        <div class="piece__frame"${aspect}>
+          <img src="${PHOTO_DIR}${encodeURIComponent(item.file)}" alt="${escapeHtml(item.alt || item.title || "")}" loading="lazy">
+        </div>
+        <div class="piece__label">
+          <h3>${escapeHtml(item.title || "")}</h3>
+          <p>${escapeHtml(item.caption || "")}</p>
+        </div>
+      </button>
+    `;
+  }).join("");
+}
+
+function renderProject() {
+  const root = document.getElementById("project-root");
+  if (!root) return;
+  const id = new URLSearchParams(location.search).get("id");
+  const list = window.WORK || [];
+  const index = list.findIndex((item) => item.id === id);
+  if (index < 0) {
+    root.innerHTML = `
+      <div class="wrap project__missing">
+        <p class="kicker">Work</p>
+        <h1>That piece isn’t here.</h1>
+        <p class="lede">It may have been renamed. The full collection is in Work.</p>
+        <p style="margin-top:1.5rem"><a class="btn btn--solid" href="work.html">Back to work</a></p>
+      </div>`;
+    document.title = "Work — Geoff Fox";
+    return;
+  }
+  const item = list[index];
+  const prev = list[(index - 1 + list.length) % list.length];
+  const next = list[(index + 1) % list.length];
+  const set = (window.SET_LABEL && SET_LABEL[item.set]) || item.set;
+  document.title = `${item.title} — Geoff Fox`;
+  setMeta("property", "og:title", `${item.title} — Geoff Fox`);
+  setMeta("name", "twitter:title", `${item.title} — Geoff Fox`);
+  if (item.caption) {
+    setMeta("name", "description", item.caption);
+    setMeta("property", "og:description", item.caption);
+  }
+  root.innerHTML = `
+    <div class="wrap project">
+      <a class="project__back" href="work.html?set=${encodeURIComponent(item.set)}">← ${escapeHtml(set)}</a>
+      <div class="project__stage">
+        <img src="${WORK_DIR}${encodeURIComponent(item.file)}" alt="${escapeHtml(item.alt || item.title)}">
+      </div>
+      <div class="project__meta">
+        <p class="kicker">${escapeHtml(set)}${item.confidential ? " · Confidential" : ""}</p>
+        <h1>${escapeHtml(item.title)}</h1>
+        <p class="lede">${escapeHtml(item.caption || item.meta || "")}</p>
+      </div>
+      <div class="project__nav">
+        <a href="project.html?id=${encodeURIComponent(prev.id)}">← ${escapeHtml(prev.title)}</a>
+        <a href="project.html?id=${encodeURIComponent(next.id)}">${escapeHtml(next.title)} →</a>
+      </div>
+    </div>
+  `;
+}
+
+function renderAbout() {
+  const exp = document.getElementById("experience-root");
+  if (exp) {
+    exp.innerHTML = (window.EXPERIENCE || []).map((job) => `
+      <li>
+        <p class="when">${escapeHtml(job.dates)}</p>
+        <h3>${escapeHtml(job.role)}</h3>
+        <p class="org">${escapeHtml(job.org)} · ${escapeHtml(job.place)}</p>
+        <ul>${(job.points || []).map((p) => `<li>${escapeHtml(p)}</li>`).join("")}</ul>
+      </li>
+    `).join("");
+  }
+  const edu = document.getElementById("education-root");
+  if (edu) {
+    edu.innerHTML = (window.EDUCATION || []).map((e) => `
+      <li>
+        <h3>${escapeHtml(e.school)}</h3>
+        <p>${escapeHtml(e.credential)}${e.dates ? " · " + escapeHtml(e.dates) : ""}</p>
+        ${e.note ? `<p>${escapeHtml(e.note)}</p>` : ""}
+      </li>
+    `).join("");
+  }
+  const awards = document.getElementById("awards-root");
+  if (awards) {
+    awards.innerHTML = (window.AWARDS || []).map((a) => `
+      <li>
+        <h3>${escapeHtml(a.title)}</h3>
+        <p>${escapeHtml(a.detail)}</p>
+      </li>
+    `).join("");
+  }
+  const tools = document.getElementById("tools-root");
+  if (tools) {
+    tools.innerHTML = `
+      <h3>Applications I use</h3>
+      <ul class="tools__pills">${(window.TOOLS || []).map((t) => `<li>${escapeHtml(t)}</li>`).join("")}</ul>
+    `;
+  }
+  const skills = document.getElementById("skills-root");
+  if (skills) {
+    skills.innerHTML = `
+      <h3>What I work on</h3>
+      <ul class="skills__pills">${(window.SKILLS || []).map((t) => `<li>${escapeHtml(t)}</li>`).join("")}</ul>
+    `;
+  }
+}
+
+function lightboxTemplate() {
+  if (document.getElementById("lightbox")) return;
+  const el = document.createElement("div");
+  el.className = "lightbox";
+  el.id = "lightbox";
+  el.hidden = true;
+  el.innerHTML = `
+    <div class="lightbox__backdrop" data-close="true"></div>
+    <div class="lightbox__dialog" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" tabindex="-1">
+      <button class="lightbox__close" type="button" data-close="true" aria-label="Close">×</button>
+      <button class="lightbox__prev" type="button" aria-label="Previous">‹</button>
+      <figure class="lightbox__figure">
+        <div class="lightbox__media" id="lightbox-media"></div>
+        <figcaption class="lightbox__caption">
+          <p class="lightbox__set" id="lightbox-set"></p>
+          <h3 class="lightbox__title" id="lightbox-title"></h3>
+          <p class="lightbox__desc" id="lightbox-desc"></p>
+        </figcaption>
+      </figure>
+      <button class="lightbox__next" type="button" aria-label="Next">›</button>
+    </div>
+  `;
+  document.body.appendChild(el);
+}
+
+function init() {
+  applyAbsoluteUrls();
+  initYear();
+  initNav();
+  initTransitions();
+  lightboxTemplate();
+  initLightbox();
+  renderFeatured();
+  renderWork();
+  renderPhotography();
+  renderProject();
+  renderAbout();
+  initReveal();
+}
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+else init();
