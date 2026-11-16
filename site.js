@@ -109,9 +109,10 @@ function pieceMarkup(item, extra = "") {
   const note = item.confidential ? `<p class="piece__note">Confidential</p>` : "";
   const wide = item.wide ? " piece--wide" : "";
   const dir = item.dir || WORK_DIR;
+  const pos = item.thumbPos ? ` style="--thumb-pos: ${item.thumbPos};"` : "";
   return `
     <a class="piece reveal ${extra}${wide}" href="${href}" data-open="${item.id}">
-      <div class="piece__frame">
+      <div class="piece__frame"${pos}>
         ${pictureTag(dir, item)}
       </div>
       <div class="piece__label">
@@ -147,9 +148,18 @@ function renderLightbox() {
       : isSketch
         ? "Sketchbook"
         : ((window.SET_LABEL && SET_LABEL[item.set]) || item.set || "");
-  lightbox.setEl.textContent = setLabel + (item.confidential ? " · Confidential" : "");
-  lightbox.title.textContent = item.title || item.caption || "";
-  lightbox.desc.textContent = item.pageCaption || ((item.caption && item.caption !== item.title) ? item.caption : (item.meta || ""));
+  const caption = lightbox.el.querySelector(".lightbox__caption");
+  if (isPhoto) {
+    lightbox.setEl.textContent = "";
+    lightbox.title.textContent = "";
+    lightbox.desc.textContent = "";
+    if (caption) caption.hidden = true;
+  } else {
+    lightbox.setEl.textContent = setLabel + (item.confidential ? " · Confidential" : "");
+    lightbox.title.textContent = item.title || item.caption || "";
+    lightbox.desc.textContent = item.pageCaption || ((item.caption && item.caption !== item.title) ? item.caption : (item.meta || ""));
+    if (caption) caption.hidden = false;
+  }
   const img = document.createElement("img");
   img.src = dir + item.file;
   img.alt = item.alt || item.title || "";
@@ -291,7 +301,7 @@ function pictureTag(dir, item) {
 function renderTextTicker(id, items, label) {
   const root = document.getElementById(id);
   if (!root || !items || !items.length) return;
-  const bits = items.map((s) => `<span class="ticker__item">${escapeHtml(s)}</span>`).join('<span class="ticker__dot" aria-hidden="true">·</span>');
+  const bits = items.map((s) => `<span class="ticker__item">${escapeHtml(s)}</span><span class="ticker__dot" aria-hidden="true">·</span>`).join("");
   root.innerHTML = `
     ${label ? `<p class="ticker__label">${escapeHtml(label)}</p>` : ""}
     <div class="ticker__viewport">
@@ -307,9 +317,12 @@ function renderHomeTickers() {
   const services = window.SERVICES || [];
   renderTextTicker("services-marquee", services, "What I do");
   renderTextTicker("place-marquee", [
-    "Based in Philadelphia, PA",
-    "Open to relocation",
-    "Let's make something"
+    "Design",
+    "Photo",
+    "Video",
+    "Story",
+    "Made with intention",
+    "Behind the screen"
   ]);
   renderTextTicker("outline-marquee", services);
 }
@@ -336,13 +349,9 @@ function renderHomePhotos() {
   if (!root) return;
   const items = (window.PHOTOGRAPHY || []).filter((item) => item.home);
   root.innerHTML = items.map((item) => `
-    <button class="piece reveal" type="button" data-open="${item.id}" data-kind="photo" aria-label="Open ${escapeHtml(item.title || "photograph")}">
+    <button class="piece reveal" type="button" data-open="${item.id}" data-kind="photo" aria-label="${escapeHtml(item.alt || "Open photograph")}">
       <div class="piece__frame">
         ${pictureTag(PHOTO_DIR, item)}
-      </div>
-      <div class="piece__label">
-        <h3>${escapeHtml(item.title || "")}</h3>
-        <p>${escapeHtml(item.caption || "")}</p>
       </div>
     </button>
   `).join("");
@@ -351,7 +360,8 @@ function renderHomePhotos() {
 function renderFeatured() {
   const root = document.getElementById("featured-root");
   if (!root) return;
-  const items = (window.WORK || []).filter((item) => item.home);
+  const items = (window.WORK || []).filter((item) => item.home)
+    .sort((a, b) => (a.homeOrder || 99) - (b.homeOrder || 99));
   root.innerHTML = items.map((item) => pieceMarkup(item)).join("");
 }
 
@@ -501,13 +511,9 @@ function renderPhotography() {
   root.innerHTML = items.map((item) => {
     const span = item.span ? ` piece--span-${escapeHtml(String(item.span))}` : "";
     return `
-      <button class="piece reveal${span}" type="button" data-open="${item.id}" data-kind="photo" aria-label="Open ${escapeHtml(item.title || "photograph")}">
+      <button class="piece reveal${span}" type="button" data-open="${item.id}" data-kind="photo" aria-label="${escapeHtml(item.alt || "Open photograph")}">
         <div class="piece__frame">
           ${pictureTag(PHOTO_DIR, item)}
-        </div>
-        <div class="piece__label">
-          <h3>${escapeHtml(item.title || "")}</h3>
-          <p>${escapeHtml(item.caption || "")}</p>
         </div>
       </button>
     `;

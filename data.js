@@ -44,7 +44,7 @@ const CATEGORIES = [
   {
     id: "shortlist",
     label: "For the shortlist",
-    blurb: "Covers, title pages, and decks for pursuits in healthcare, higher education, and brand activations. Client names and identifying marks have been withheld."
+    blurb: "A sample of the covers, title pages, and proposal decks I design for pursuits across a wide range of markets and clients. Client names and identifying marks have been withheld."
   }
 ];
 
@@ -57,7 +57,6 @@ const SET_LABEL = {
 const WORK = [
   {
     id: "aegis-court-sign",
-    home: true,
     title: "Court board",
     meta: "Sponsorship signage",
     set: "floor",
@@ -97,9 +96,24 @@ const WORK = [
     caption: "A compact expo ad meant to be taken in at a glance, then taken home as a QR."
   },
 
+  {
+    id: "philly-new-arena",
+    home: true,
+    homeOrder: 4,
+    title: "Philadelphia's New Arena",
+    meta: "Outreach event flyer",
+    set: "floor",
+    file: "philly-new-arena-flyer.jpg",
+    webp: "philly-new-arena-flyer.webp",
+    alt: "PACT+ outreach event flyer for Philadelphia's New Arena, for local and small construction companies, on Wednesday, November 18 at Xfinity Mobile Arena.",
+    caption: "A PACT+ outreach event flyer I designed for local and small construction companies, about Philadelphia's New Arena. The event is Wednesday, November 18, at Xfinity Mobile Arena, with networking from 12:30 p.m. to 1:30 p.m. and a presentation from 1:30 p.m. to 2:30 p.m."
+  },
+
 
   {
     id: "turner-nyc-skyline-banner",
+    home: true,
+    homeOrder: 1,
     title: "Turner skyline banner",
     meta: "Wide banner",
     set: "circulation",
@@ -111,6 +125,8 @@ const WORK = [
   },
   {
     id: "share-the-warmth",
+    home: true,
+    homeOrder: 2,
     title: "Share the Warmth",
     meta: "Winter clothing drive flyer",
     set: "circulation",
@@ -135,17 +151,9 @@ const WORK = [
   },
 
   {
-    id: "philly-new-arena",
-    title: "Philadelphia's New Arena",
-    meta: "Outreach event flyer",
-    set: "circulation",
-    file: "philly-new-arena-flyer.jpg",
-    webp: "philly-new-arena-flyer.webp",
-    alt: "PACT+ outreach event flyer for Philadelphia's New Arena, for local and small construction companies, on Wednesday, November 18 at Xfinity Mobile Arena.",
-    caption: "A PACT+ outreach event flyer I designed for local and small construction companies, about Philadelphia's New Arena. The event is Wednesday, November 18, at Xfinity Mobile Arena, with networking from 12:30 p.m. to 1:30 p.m. and a presentation from 1:30 p.m. to 2:30 p.m."
-  },
-  {
     id: "inclusion-week-fair",
+    home: true,
+    homeOrder: 7,
     title: "Apprenticeship Awareness Fair",
     meta: "Event flyer",
     set: "circulation",
@@ -156,6 +164,8 @@ const WORK = [
   },
   {
     id: "holiday-card-2026",
+    home: true,
+    homeOrder: 3,
     title: "2026 Holiday Card",
     meta: "Holiday card",
     set: "circulation",
@@ -218,6 +228,7 @@ const WORK = [
   {
     id: "pickleball-poster",
     home: true,
+    homeOrder: 6,
     title: "Pickleball challenge",
     meta: "Event poster",
     set: "circulation",
@@ -238,7 +249,6 @@ const WORK = [
   },
   {
     id: "levis-stadium",
-    home: true,
     title: "Levi’s Stadium",
     meta: "LinkedIn graphic",
     set: "circulation",
@@ -249,6 +259,9 @@ const WORK = [
   },
   {
     id: "community-support-ad",
+    home: true,
+    homeOrder: 5,
+    thumbPos: "74% 50%",
     title: "Turner community sponsorship ads",
     meta: "Sponsor advertisements",
     set: "circulation",
@@ -324,7 +337,6 @@ const WORK = [
   },
   {
     id: "passport-burj",
-    home: true,
     title: "Visa series, I",
     meta: "Illustrated campaign",
     set: "circulation",
@@ -411,7 +423,6 @@ const WORK = [
   },
   {
     id: "hall-cover",
-    home: true,
     title: "Historic hall",
     meta: "Higher education · confidential",
     set: "shortlist",
@@ -423,7 +434,6 @@ const WORK = [
   },
   {
     id: "pitch-title",
-    home: true,
     title: "Brand activation pitch",
     meta: "Title page · confidential",
     set: "shortlist",
@@ -442,7 +452,7 @@ const TOOLS = [
   { name: "Photoshop", icon: "adobephotoshop" },
   { name: "InDesign", icon: "adobeindesign" },
   { name: "Illustrator", icon: "adobeillustrator" },
-  { name: "Fresco", icon: null },
+  { name: "Fresco", icon: "adobefresco" },
   { name: "After Effects", icon: "adobeaftereffects" },
   { name: "Premiere Pro", icon: "adobepremierepro" },
   { name: "Canva", icon: "canva" },
@@ -510,7 +520,9 @@ const EXPERIENCE = [
     place: "Orlando, FL",
     dates: "Mar 2019 to Aug 2019",
     points: [
-      "Wrote instructional guides for BIM processes and walked the site to assess training needs for safety and efficiency."
+      "Built 3D models of buildings in BIM (Building Information Modeling). BIM uses detailed 3D models to plan and coordinate a building before it goes up.",
+      "Ran clash detection in coordination software to make sure trade systems do not collide before construction.",
+      "Conducted site visits to assess training needs for safety and efficiency improvements."
     ]
   }
 ];
