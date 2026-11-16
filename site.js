@@ -142,7 +142,16 @@ function renderLightbox() {
   const img = document.createElement("img");
   img.src = dir + item.file;
   img.alt = item.alt || item.title || "";
-  lightbox.media.replaceChildren(img);
+  if (item.webp) {
+    const pic = document.createElement("picture");
+    const source = document.createElement("source");
+    source.type = "image/webp";
+    source.srcset = dir + item.webp;
+    pic.append(source, img);
+    lightbox.media.replaceChildren(pic);
+  } else {
+    lightbox.media.replaceChildren(img);
+  }
 }
 
 function openLightboxFromList(list, id) {
@@ -218,6 +227,88 @@ function initLightbox() {
   });
 }
 
+function toolName(t) {
+  return typeof t === "string" ? t : (t && t.name) || "";
+}
+
+function toolItemHtml(t) {
+  const name = escapeHtml(toolName(t));
+  const icon = t && typeof t === "object" ? t.icon : null;
+  if (icon) {
+    return `<span class="apps-item"><img class="apps-item__icon" src="assets/icons/${encodeURIComponent(icon)}.svg" alt="" width="20" height="20"><span class="apps-item__name">${name}</span></span>`;
+  }
+  const badge = escapeHtml(toolName(t).slice(0, 2));
+  return `<span class="apps-item apps-item--wordmark"><span class="apps-item__badge" aria-hidden="true">${badge}</span><span class="apps-item__name">${name}</span></span>`;
+}
+
+function pictureTag(dir, item) {
+  const jpg = dir + encodeURIComponent(item.file);
+  const alt = escapeHtml(item.alt || item.title || "");
+  const img = `<img src="${jpg}" alt="${alt}" loading="lazy">`;
+  if (!item.webp) return img;
+  return `<picture><source type="image/webp" srcset="${dir}${encodeURIComponent(item.webp)}">${img}</picture>`;
+}
+
+function renderTextTicker(id, items, label) {
+  const root = document.getElementById(id);
+  if (!root || !items || !items.length) return;
+  const bits = items.map((s) => `<span class="ticker__item">${escapeHtml(s)}</span>`).join('<span class="ticker__dot" aria-hidden="true">·</span>');
+  root.innerHTML = `
+    ${label ? `<p class="ticker__label">${escapeHtml(label)}</p>` : ""}
+    <div class="ticker__viewport">
+      <div class="ticker__track">
+        <div class="ticker__set">${bits}</div>
+        <div class="ticker__set" aria-hidden="true">${bits}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderHomeTickers() {
+  const services = window.SERVICES || [];
+  renderTextTicker("services-marquee", services, "What I do");
+  renderTextTicker("place-marquee", [
+    "Based in Philadelphia, PA",
+    "Open to relocation",
+    "Let's make something"
+  ]);
+  renderTextTicker("outline-marquee", services);
+}
+
+function renderAppsMarquee() {
+  const root = document.getElementById("apps-marquee");
+  if (!root) return;
+  const items = (window.TOOLS || []).map(toolItemHtml).join("");
+  root.innerHTML = `
+    <div class="apps-marquee__inner">
+      <p class="apps-marquee__label">What I work in</p>
+      <div class="apps-marquee__viewport">
+        <div class="apps-marquee__track">
+          <div class="apps-marquee__set">${items}</div>
+          <div class="apps-marquee__set" aria-hidden="true">${items}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderHomePhotos() {
+  const root = document.getElementById("home-photos-root");
+  if (!root) return;
+  const items = (window.PHOTOGRAPHY || []).filter((item) => item.home);
+  root.innerHTML = items.map((item) => `
+    <button class="piece reveal" type="button" data-open="${item.id}" data-kind="photo" aria-label="Open ${escapeHtml(item.title || "photograph")}">
+      <div class="piece__frame">
+        ${pictureTag(PHOTO_DIR, item)}
+      </div>
+      <div class="piece__label">
+        <h3>${escapeHtml(item.title || "")}</h3>
+        <p>${escapeHtml(item.caption || "")}</p>
+      </div>
+    </button>
+  `).join("");
+}
+
 function renderFeatured() {
   const root = document.getElementById("featured-root");
   if (!root) return;
@@ -253,7 +344,7 @@ function renderWork() {
     });
     if (blurb) {
       const cat = cats.find((c) => c.id === set);
-      blurb.textContent = cat ? cat.blurb : "Every piece here was built for a specific distance.";
+      blurb.textContent = cat ? cat.blurb : "A mix of signs, campaigns, and proposal work. Use the filters if you want to narrow it down.";
     }
     const url = new URL(location.href);
     if (set === "all") url.searchParams.delete("set");
@@ -283,11 +374,11 @@ function renderPhotography() {
   if (empty) empty.hidden = true;
   root.hidden = false;
   root.innerHTML = items.map((item) => {
-    const aspect = item.aspect ? ` style="aspect-ratio:${escapeHtml(item.aspect)}"` : "";
+    const span = item.span ? ` piece--span-${escapeHtml(String(item.span))}` : "";
     return `
-      <button class="piece reveal" type="button" data-open="${item.id}" data-kind="photo" aria-label="Open ${escapeHtml(item.title || "photograph")}">
-        <div class="piece__frame"${aspect}>
-          <img src="${PHOTO_DIR}${encodeURIComponent(item.file)}" alt="${escapeHtml(item.alt || item.title || "")}" loading="lazy">
+      <button class="piece reveal${span}" type="button" data-open="${item.id}" data-kind="photo" aria-label="Open ${escapeHtml(item.title || "photograph")}">
+        <div class="piece__frame">
+          ${pictureTag(PHOTO_DIR, item)}
         </div>
         <div class="piece__label">
           <h3>${escapeHtml(item.title || "")}</h3>
@@ -309,19 +400,19 @@ function renderProject() {
       <div class="wrap project__missing">
         <p class="kicker">Work</p>
         <h1>That piece isn’t here.</h1>
-        <p class="lede">It may have been renamed. The full collection is in Work.</p>
+        <p class="lede">I may have renamed it. You can find everything in Work.</p>
         <p style="margin-top:1.5rem"><a class="btn btn--solid" href="work.html">Back to work</a></p>
       </div>`;
-    document.title = "Work — Geoff Fox";
+    document.title = "Work · Geoff Fox";
     return;
   }
   const item = list[index];
   const prev = list[(index - 1 + list.length) % list.length];
   const next = list[(index + 1) % list.length];
   const set = (window.SET_LABEL && SET_LABEL[item.set]) || item.set;
-  document.title = `${item.title} — Geoff Fox`;
-  setMeta("property", "og:title", `${item.title} — Geoff Fox`);
-  setMeta("name", "twitter:title", `${item.title} — Geoff Fox`);
+  document.title = `${item.title} · Geoff Fox`;
+  setMeta("property", "og:title", `${item.title} · Geoff Fox`);
+  setMeta("name", "twitter:title", `${item.title} · Geoff Fox`);
   if (item.caption) {
     setMeta("name", "description", item.caption);
     setMeta("property", "og:description", item.caption);
@@ -379,14 +470,14 @@ function renderAbout() {
   const tools = document.getElementById("tools-root");
   if (tools) {
     tools.innerHTML = `
-      <h3>Applications I use</h3>
-      <ul class="tools__pills">${(window.TOOLS || []).map((t) => `<li>${escapeHtml(t)}</li>`).join("")}</ul>
+      <h3>The apps I reach for</h3>
+      <ul class="tools__pills tools__pills--icons">${(window.TOOLS || []).map((tool) => `<li>${toolItemHtml(tool)}</li>`).join("")}</ul>
     `;
   }
   const skills = document.getElementById("skills-root");
   if (skills) {
     skills.innerHTML = `
-      <h3>What I work on</h3>
+      <h3>The kind of work I do</h3>
       <ul class="skills__pills">${(window.SKILLS || []).map((t) => `<li>${escapeHtml(t)}</li>`).join("")}</ul>
     `;
   }
@@ -424,7 +515,10 @@ function init() {
   initTransitions();
   lightboxTemplate();
   initLightbox();
+  renderAppsMarquee();
+  renderHomeTickers();
   renderFeatured();
+  renderHomePhotos();
   renderWork();
   renderPhotography();
   renderProject();

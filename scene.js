@@ -1,4 +1,4 @@
-/* Home hero: magazine-cover layers — type behind, cutout in front —
+/* Home hero: magazine-cover layers, type behind, cutout in front,
    plus a quiet particle field and pointer parallax at different depths. */
 
 import * as THREE from "three";

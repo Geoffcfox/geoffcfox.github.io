@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Geoff Fox — site data
+   Geoff Fox, site data
    HOW TO ADD WORK
    1. Place a file in assets/images/work/
       (optional 1024px texture is not required unless you reuse a 3D scene).
@@ -17,7 +17,7 @@
 const SITE = {
   name: "Geoff Fox",
   role: "Creative Marketing & Brand Strategist",
-  city: "New York City",
+  city: "Philadelphia, PA",
   relocation: "Open to relocation",
   email: "Foxgeoffbusiness@gmail.com",
   linkedin: "https://www.linkedin.com/in/geoffrey-fox/",
@@ -34,12 +34,12 @@ const CATEGORIES = [
   {
     id: "floor",
     label: "On the floor",
-    blurb: "Signage, title walls, retractable banners, and expo ads — graphics that have to hold among people, noise, and architecture."
+    blurb: "Signs, banners, and expo ads I have made to hold up in a busy room."
   },
   {
     id: "circulation",
     label: "In circulation",
-    blurb: "Invitations, announcements, social pieces, internal meetings, and print ads — work that has to move without losing its voice."
+    blurb: "Invitations, announcements, social posts, and print ads. Work that has to travel without losing its voice."
   },
   {
     id: "shortlist",
@@ -74,7 +74,7 @@ const WORK = [
     featured: true,
     file: "cvu-retractable-banner.jpg",
     alt: "Tall retractable event banner designed by Geoff Fox.",
-    caption: "A vertical banner for a live industry event — built for a crowded aisle."
+    caption: "A tall banner I designed for a busy industry event, built to read in a crowded aisle."
   },
   {
     id: "cvu-pickleball-banner",
@@ -104,7 +104,7 @@ const WORK = [
     featured: true,
     file: "golf-outing-flyer.jpg",
     alt: "Flyer for a charity golf outing, designed by Geoff Fox.",
-    caption: "Print invitation for an annual outing — schedule, sponsors, and a reason to come."
+    caption: "A print invitation for an annual outing, with the schedule, the sponsors, and a reason to come."
   },
   {
     id: "save-the-date",
@@ -124,7 +124,7 @@ const WORK = [
     featured: false,
     file: "intern-welcome-board.jpg",
     alt: "Welcome board for an intern class, designed by Geoff Fox.",
-    caption: "A welcome board for a new intern class — names and faces, made to feel like a cohort."
+    caption: "A welcome board for a new intern class, with names and faces, so it feels like a cohort."
   },
   {
     id: "pickleball-poster",
@@ -186,7 +186,7 @@ const WORK = [
     featured: false,
     file: "winter-newsletter.jpg",
     alt: "Cover of a winter newsletter, designed by Geoff Fox.",
-    caption: "Cover for a seasonal internal newsletter — a still that has to carry a whole issue."
+    caption: "The cover for a seasonal internal newsletter. I wanted one still that could carry the whole issue."
   },
   {
     id: "meeting-deck-winter",
@@ -206,7 +206,7 @@ const WORK = [
     featured: false,
     file: "social-style-guide.jpg",
     alt: "Pages from a social media style guide, designed by Geoff Fox.",
-    caption: "A short guide for how the brand should show up in social — examples, not just rules."
+    caption: "A short guide for how the brand should show up on social, with examples, not just rules."
   },
   {
     id: "market-analysis",
@@ -227,7 +227,7 @@ const WORK = [
     featured: true,
     file: "passport-burj-khalifa.jpg",
     alt: "Illustrated visa-style poster featuring a city skyline, designed by Geoff Fox.",
-    caption: "One of a pair of illustrated “visa” posters — a campaign idea rendered as an artifact you would keep."
+    caption: "One of a pair of illustrated “visa” posters. A campaign idea made to feel like something you would keep."
   },
   {
     id: "passport-unity",
@@ -331,20 +331,21 @@ const WORK = [
   }
 ];
 
-/* Applications list — edit this array to add or remove tools.
-   The resume listed “Adobe Creative Suite” and “Microsoft Office” only.
-   After Effects is included because it appears on the live site; Geoff should
-   confirm the individual app names before this goes public. */
+/* Applications I use. Edit this array to add or remove tools.
+   Icons live in assets/icons/ (Simple Icons SVGs). Leave icon empty for a wordmark badge. */
 const TOOLS = [
-  "Photoshop",
-  "Illustrator",
-  "InDesign",
-  "Premiere Pro",
-  "After Effects",
-  "Lightroom",
-  "Word",
-  "PowerPoint",
-  "Excel"
+  { name: "Lightroom", icon: "adobelightroom" },
+  { name: "Photoshop", icon: "adobephotoshop" },
+  { name: "InDesign", icon: "adobeindesign" },
+  { name: "Illustrator", icon: "adobeillustrator" },
+  { name: "Fresco", icon: null },
+  { name: "After Effects", icon: "adobeaftereffects" },
+  { name: "Premiere Pro", icon: "adobepremierepro" },
+  { name: "Canva", icon: "canva" },
+  { name: "Figma", icon: "figma" },
+  { name: "GitHub", icon: "github" },
+  { name: "Excel", icon: "microsoftexcel" },
+  { name: "PowerPoint", icon: "microsoftpowerpoint" }
 ];
 
 const SKILLS = [
@@ -363,7 +364,7 @@ const EXPERIENCE = [
     role: "Marketing Coordinator II",
     org: "Turner Construction Company",
     place: "Philadelphia",
-    dates: "Dec 2025 – Present",
+    dates: "Dec 2025 to Present",
     points: [
       "Coordinate and develop RFP, RFQ, and proposal materials, including covers, project experience, team qualifications, and approach sections.",
       "Create collateral, presentations, signage, newsletters, and internal communications.",
@@ -375,7 +376,7 @@ const EXPERIENCE = [
     role: "Marketing Coordinator Intern",
     org: "Turner Construction Company",
     place: "Bridgewater, NJ",
-    dates: "Jun 2025 – Aug 2025",
+    dates: "Jun 2025 to Aug 2025",
     points: [
       "Assisted the business development and marketing team with proposals, presentations, and marketing materials for live pursuits."
     ]
@@ -384,7 +385,7 @@ const EXPERIENCE = [
     role: "Manager on Duty, Front Desk",
     org: "Equinox Sports Club",
     place: "New York, NY",
-    dates: "Aug 2022 – Dec 2024",
+    dates: "Aug 2022 to Dec 2024",
     points: [
       "Led a thirty-person front desk team, including onboarding, skill development, and day-to-day service standards.",
       "Designed a training program that reduced onboarding time by 30 percent, with performance tracking to keep the program honest."
@@ -394,7 +395,7 @@ const EXPERIENCE = [
     role: "Lifeguard",
     org: "Universal Volcano Bay",
     place: "Orlando, FL",
-    dates: "Dec 2019 – Jun 2020",
+    dates: "Dec 2019 to Jun 2020",
     points: [
       "Conducted safety and compliance training, and provided emergency-response and first-aid instruction for staff."
     ]
@@ -403,7 +404,7 @@ const EXPERIENCE = [
     role: "VDC/BIM Engineering Intern",
     org: "Turner Construction Company",
     place: "Orlando, FL",
-    dates: "Mar 2019 – Aug 2019",
+    dates: "Mar 2019 to Aug 2019",
     points: [
       "Wrote instructional guides for BIM processes and walked the site to assess training needs for safety and efficiency."
     ]
@@ -413,14 +414,14 @@ const EXPERIENCE = [
 const EDUCATION = [
   {
     school: "Full Sail University",
-    credential: "B.S. Digital Marketing",
+    credential: "B.S. Business, concentration in Digital Marketing",
     dates: "October 2026",
     note: "Valedictorian. Course Director Award for Leadership & Organization."
   },
   {
     school: "Clark University",
     credential: "Coursework",
-    dates: "2017 – 2018"
+    dates: "2017 to 2018"
   },
   {
     school: "The Masters School",
@@ -432,7 +433,7 @@ const EDUCATION = [
 const AWARDS = [
   {
     title: "Valedictorian",
-    detail: "Graduated as Valedictorian of the Digital Marketing B.S. program at Full Sail University."
+    detail: "Graduated as Valedictorian of the B.S. in Business program at Full Sail University, with a concentration in Digital Marketing."
   },
   {
     title: "Course Director Award for Leadership & Organization",
@@ -449,15 +450,142 @@ const ASIDE = [
   "Varsity captain in lacrosse and soccer; ten varsity letters."
 ];
 
-/* Photographs — add files to assets/images/photography/ and an entry here.
+/* Photographs: add files to assets/images/photography/ and an entry here.
    Example:
-   { id: "jobsite-01", file: "jobsite-01.jpg", alt: "…", caption: "…", aspect: "3 / 2" }
+   { id: "jobsite-01", file: "jobsite-01.jpg", webp: "jobsite-01.webp", alt: "...", caption: "...", span: "6", home: true }
 */
-const PHOTOGRAPHY = [];
+const PHOTOGRAPHY = [
+  {
+    id: "group-briefing",
+    kind: "photo",
+    title: "Before the outing",
+    file: "group-briefing.jpg",
+    webp: "group-briefing.webp",
+    alt: "An organizer briefing a group indoors before a golf outing.",
+    caption: "A few last notes before everyone heads out to the course.",
+    span: "6"
+  },
+  {
+    id: "event-checkin",
+    kind: "photo",
+    title: "Check-in",
+    file: "event-checkin.jpg",
+    webp: "event-checkin.webp",
+    alt: "Guests talking around the check-in table at a golf outing.",
+    caption: "Check-in at the golf outing. I love these in-between conversations.",
+    span: "6"
+  },
+  {
+    id: "golf-swing",
+    kind: "photo",
+    title: "Mid-swing",
+    file: "golf-swing.jpg",
+    webp: "golf-swing.webp",
+    alt: "A golfer mid-swing on a sunny autumn course, with teammates watching.",
+    caption: "Mid-swing on a clear autumn morning.",
+    span: "4"
+  },
+  {
+    id: "autumn-green",
+    kind: "photo",
+    title: "On the green",
+    file: "autumn-green.jpg",
+    webp: "autumn-green.webp",
+    alt: "Three golfers on a green, with autumn trees in full color behind them.",
+    caption: "A quiet walk onto the green, with the trees doing most of the talking.",
+    span: "8"
+  },
+  {
+    id: "team-red-trees",
+    kind: "photo",
+    home: true,
+    title: "The group",
+    file: "team-red-trees.jpg",
+    webp: "team-red-trees.webp",
+    alt: "Five golfers posing together under vivid red autumn trees.",
+    caption: "Five of the group, and a backdrop I could not have planned better.",
+    span: "8"
+  },
+  {
+    id: "tee-shot",
+    kind: "photo",
+    title: "Off the tee",
+    file: "tee-shot.jpg",
+    webp: "tee-shot.webp",
+    alt: "A golfer teeing off on a sunny course, with sponsor signs behind him.",
+    caption: "Off the tee, with the sponsor signs looking on.",
+    span: "4"
+  },
+  {
+    id: "sign-in-table",
+    kind: "photo",
+    title: "Signing in",
+    file: "sign-in-table.jpg",
+    webp: "sign-in-table.webp",
+    alt: "A woman leaning over a table to sign in before an event.",
+    caption: "Signing in, quietly, before the day gets going.",
+    span: "6"
+  },
+  {
+    id: "window-view",
+    kind: "photo",
+    title: "The view",
+    file: "window-view.jpg",
+    webp: "window-view.webp",
+    alt: "A man and a young boy looking out a high-rise window over the city.",
+    caption: "A pause at the window, taking in the city from up high.",
+    span: "6"
+  },
+  {
+    id: "golf-cart-wave",
+    kind: "photo",
+    title: "Cart 13",
+    file: "golf-cart-wave.jpg",
+    webp: "golf-cart-wave.webp",
+    alt: "A man waving from the passenger seat of a golf cart, with another cart behind.",
+    caption: "A wave from cart 13, heading down the path.",
+    span: "4"
+  },
+  {
+    id: "office-laptop-hivis",
+    kind: "photo",
+    title: "Looking it over",
+    file: "office-laptop-hivis.jpg",
+    webp: "office-laptop-hivis.webp",
+    alt: "A woman with a laptop sitting beside a girl in a hi-vis vest, framed by chairs.",
+    caption: "A little look over the work, hi-vis vest and all.",
+    span: "8"
+  },
+  {
+    id: "hard-hat",
+    kind: "photo",
+    home: true,
+    title: "The hard hat",
+    file: "hard-hat.jpg",
+    webp: "hard-hat.webp",
+    alt: "A little girl putting a white hard hat on a man's head by a window.",
+    caption: "The hard hat goes on, carefully.",
+    span: "12"
+  }
+];
 
 const WORK_DIR = "assets/images/work/";
 const PHOTO_DIR = "assets/images/photography/";
 
+
+const SERVICES = [
+  "Social Media",
+  "Brand Strategy",
+  "Graphic Design",
+  "Photography",
+  "Videography",
+  "Content Creation",
+  "Marketing Campaigns",
+  "Proposal Design",
+  "Event Signage",
+  "Newsletters"
+];
+
 Object.assign(window, {
-  SITE, CATEGORIES, SET_LABEL, WORK, TOOLS, SKILLS, EXPERIENCE, EDUCATION, AWARDS, ASIDE, PHOTOGRAPHY, WORK_DIR, PHOTO_DIR
+  SITE, CATEGORIES, SET_LABEL, WORK, TOOLS, SKILLS, SERVICES, EXPERIENCE, EDUCATION, AWARDS, ASIDE, PHOTOGRAPHY, WORK_DIR, PHOTO_DIR
 });
