@@ -9,7 +9,9 @@ A static, multi-page marketing portfolio. Open any HTML file in a browser, or de
 | `index.html` | Home: portrait hero, tools marquee, short intro, featured work, a couple of photographs |
 | `work.html` | Work index, with category filters |
 | `project.html?id=…` | A single piece (shareable; linked from Work) |
+| `branding.html` | Logo and branding projects, starting with MIND |
 | `photography.html` | Photography gallery |
+| `sketchbook.html` | Fresco drawings (empty state until drawings are added) |
 | `about.html` | Bio, skills, tools, experience, education, awards, résumé |
 | `contact.html` | Email and LinkedIn |
 
@@ -69,6 +71,16 @@ The work index, filters, lightbox, home featured row, and `project.html?id=a-uni
 ```
 
 If the array is empty, the photography page shows a short ready state instead of a broken grid.
+
+## How to add branding work
+
+1. Add optimized web images to `assets/images/branding/` (JPEG or PNG, plus WebP). Do not commit large originals or print PDFs.
+2. Add a project object to the `BRANDING` array in `data.js`, with an `assets` list. Use `kind: "brand-logo"` for a mark that should sit on a light panel, and `kind: "brand"` for campaign pages.
+
+## How to add sketchbook drawings
+
+1. Add optimized web images to `assets/images/sketchbook/`.
+2. Add objects to the `SKETCHBOOK` array in `data.js`. If the array is empty, the page shows a "Drawings coming soon" state.
 
 ## How to add a new page
 

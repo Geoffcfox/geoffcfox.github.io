@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Geoff Fox">
+  <meta name="theme-color" content="#090A0C">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://geoffcfox.github.io/assets/og-image.png">
+  <meta property="og:url" content="https://geoffcfox.github.io/sketchbook.html">
+  <link rel="canonical" href="https://geoffcfox.github.io/sketchbook.html">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="627">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://geoffcfox.github.io/assets/og-image.png">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;1,400&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <title>Sketchbook · Geoff Fox</title>
+  <meta name="description" content="A sketchbook page for drawings Geoff Fox makes in Adobe Fresco. Drawings coming soon.">
+  <meta property="og:title" content="Sketchbook · Geoff Fox">
+  <meta property="og:description" content="A sketchbook page for drawings Geoff Fox makes in Adobe Fresco. Drawings coming soon.">
+  <meta name="twitter:title" content="Sketchbook · Geoff Fox">
+  <meta name="twitter:description" content="A sketchbook page for drawings Geoff Fox makes in Adobe Fresco. Drawings coming soon.">
+</head>
+<body data-page="sketchbook">
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="mast">
+    <nav class="mast__nav" aria-label="Primary">
+      <a class="mast__mark" href="index.html">Geoff Fox</a>
+      <button class="mast__toggle" type="button" aria-expanded="false" aria-controls="mast-menu" aria-label="Open menu">
+        <span></span><span></span>
+      </button>
+      <ul class="mast__list" id="mast-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="branding.html">Branding</a></li>
+        <li><a href="photography.html">Photography</a></li>
+        <li><a href="sketchbook.html" aria-current="page">Sketchbook</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html" class="mast__write">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="content">
+    <div class="wrap">
+      <header class="page-head reveal">
+        <p class="kicker">Sketchbook</p>
+        <h1>Drawings I make in Fresco will live here.</h1>
+        <p class="lede">I use Adobe Fresco to draw, and I will share some of that work on this page once it is ready.</p>
+      </header>
+      <div id="sketch-empty" class="sketch-empty">
+        <p class="kicker">Fresco</p>
+        <h2>Drawings coming soon</h2>
+        <p>I have not added any drawings yet. Please check back.</p>
+      </div>
+      <div id="sketch-root" class="sketch-grid" hidden></div>
+
+    </div>
+  </main>
+
+  <footer class="colophon">
+    <div class="wrap colophon__row">
+      <p>© <span data-year>2026</span> Geoff Fox</p>
+      <ul>
+        <li><a href="mailto:Foxgeoffbusiness@gmail.com">Email</a></li>
+        <li><a href="https://www.linkedin.com/in/geoffrey-fox/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="data.js"></script>
+  <script src="site.js"></script>
+</body>
+</html>

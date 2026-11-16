@@ -96,6 +96,95 @@ const WORK = [
     alt: "Expo advertisement for a construction safety product, designed by Geoff Fox.",
     caption: "A compact expo ad meant to be taken in at a glance, then taken home as a QR."
   },
+
+
+  {
+    id: "turner-nyc-skyline-banner",
+    title: "Turner skyline banner",
+    meta: "Wide banner",
+    set: "circulation",
+    wide: true,
+    file: "turner-nyc-banner.jpg",
+    webp: "turner-nyc-banner.webp",
+    alt: "Wide Turner banner with the Turner logo over a paper-cut style New York City skyline, including the Statue of Liberty, the Empire State Building, a plane, a hot air balloon, and a sun.",
+    caption: "A wide banner I designed for Turner, with the Turner logo over a paper-cut style New York City skyline."
+  },
+  {
+    id: "share-the-warmth",
+    title: "Share the Warmth",
+    meta: "Winter clothing drive flyer",
+    set: "circulation",
+    file: "share-the-warmth-1.jpg",
+    webp: "share-the-warmth-1.webp",
+    alt: "Share the Warmth winter clothing drive flyer presented by MIND and Wohlsen, with coats, hats, gloves, scarves, socks, and thermal layers hanging on a line.",
+    caption: "A winter clothing drive flyer I designed, presented by MIND and Wohlsen. The drive runs from November 30, 2026 to January 4, 2027.",
+    pages: [
+      {
+        file: "share-the-warmth-1.jpg",
+        webp: "share-the-warmth-1.webp",
+        alt: "Share the Warmth winter clothing drive flyer presented by MIND and Wohlsen, with coats, hats, gloves, scarves, socks, and thermal layers hanging on a line.",
+        caption: "Front, presented by MIND and Wohlsen"
+      },
+      {
+        file: "share-the-warmth-2.jpg",
+        webp: "share-the-warmth-2.webp",
+        alt: "Share the Warmth winter clothing drive flyer presented by MIND, ending with a thank you for your kindness.",
+        caption: "A second page, with thanks"
+      }
+    ]
+  },
+
+  {
+    id: "philly-new-arena",
+    title: "Philadelphia's New Arena",
+    meta: "Outreach event flyer",
+    set: "circulation",
+    file: "philly-new-arena-flyer.jpg",
+    webp: "philly-new-arena-flyer.webp",
+    alt: "PACT+ outreach event flyer for Philadelphia's New Arena, for local and small construction companies, on Wednesday, November 18 at Xfinity Mobile Arena.",
+    caption: "A PACT+ outreach event flyer I designed for local and small construction companies, about Philadelphia's New Arena. The event is Wednesday, November 18, at Xfinity Mobile Arena, with networking from 12:30 p.m. to 1:30 p.m. and a presentation from 1:30 p.m. to 2:30 p.m."
+  },
+  {
+    id: "inclusion-week-fair",
+    title: "Apprenticeship Awareness Fair",
+    meta: "Event flyer",
+    set: "circulation",
+    file: "inclusion-week-flyer.jpg",
+    webp: "inclusion-week-flyer.webp",
+    alt: "Flyer for the Construction Inclusion Week Apprenticeship Awareness Fair, hosted by Turner Construction Company and Gilbane Building Company, on Thursday, October 15, 2026.",
+    caption: "A flyer I designed for the Construction Inclusion Week Apprenticeship Awareness Fair, hosted by Turner Construction Company and Gilbane Building Company. It takes place on Thursday, October 15, 2026, from 10 a.m. to 2 p.m. at Gilbane's office, with registration by QR code."
+  },
+  {
+    id: "holiday-card-2026",
+    title: "2026 Holiday Card",
+    meta: "Holiday card",
+    set: "circulation",
+    file: "holiday-card-front.jpg",
+    webp: "holiday-card-front.webp",
+    alt: "Front of a 2026 holiday card: a snowy city skyline at dusk, with a crane lifting a wreath beside a building under construction.",
+    caption: "A 2026 holiday card I designed. The front is a snowy city skyline with a crane lifting a wreath, the inside leaves room for a greeting, and the back looks out on boathouses along the water.",
+    stage: "stack",
+    pages: [
+      {
+        file: "holiday-card-front.jpg",
+        webp: "holiday-card-front.webp",
+        alt: "Front of a 2026 holiday card: a snowy city skyline at dusk, with a crane lifting a wreath beside a building under construction.",
+        caption: "Front"
+      },
+      {
+        file: "holiday-card-inside.jpg",
+        webp: "holiday-card-inside.webp",
+        alt: "Inside of the 2026 holiday card: a cream panel with a gold border, holly, and line drawings of a crane and a steel frame, leaving room for a greeting.",
+        caption: "Inside"
+      },
+      {
+        file: "holiday-card-back.jpg",
+        webp: "holiday-card-back.webp",
+        alt: "Back of the 2026 holiday card: snowy boathouses along a river, with a city skyline and a crane in the distance.",
+        caption: "Back"
+      }
+    ]
+  },
   {
     id: "golf-outing-flyer",
     title: "Charity golf outing",
@@ -160,13 +249,28 @@ const WORK = [
   },
   {
     id: "community-support-ad",
-    title: "Community support",
-    meta: "Print advertisement",
+    title: "Turner community sponsorship ads",
+    meta: "Sponsor advertisements",
     set: "circulation",
-    featured: false,
     file: "nemours-support-ad.jpg",
-    alt: "Print advertisement for a community support initiative, designed by Geoff Fox.",
-    caption: "A print advertisement for a community support program, written and designed to be straightforward."
+    webp: "nemours-support-ad.webp",
+    alt: "Turner advertisement reading Proud to support Nemours Children's Health, with a family at a table in a bright room.",
+    caption: "Sponsor advertisements I designed for Turner. One says proud to support Nemours Children's Health, and the other is a proud sponsor ad for the Geisinger Health Foundation, with the line Building a Healthier Future Together.",
+    stage: "stack",
+    pages: [
+      {
+        file: "nemours-support-ad.jpg",
+        webp: "nemours-support-ad.webp",
+        alt: "Turner advertisement reading Proud to support Nemours Children's Health, with two women and a boy at a table in a bright room.",
+        caption: "Proud to support Nemours Children's Health"
+      },
+      {
+        file: "geisinger-sponsor.jpg",
+        webp: "geisinger-sponsor.webp",
+        alt: "Turner advertisement reading Building a Healthier Future Together, proud sponsor of the Geisinger Health Foundation, with banners and workers carrying a signed beam.",
+        caption: "Building a Healthier Future Together, for the Geisinger Health Foundation"
+      }
+    ]
   },
   {
     id: "pmpx-summer",
@@ -572,6 +676,29 @@ const PHOTOGRAPHY = [
 const WORK_DIR = "assets/images/work/";
 const PHOTO_DIR = "assets/images/photography/";
 
+const BRAND_DIR = "assets/images/branding/";
+
+const BRANDING = [
+  {
+    id: "mind",
+    title: "MIND: Logo",
+    description: "MIND stands for Minority, Indigenous, Nurturing Development. I designed the logo.",
+    assets: [
+      {
+        id: "mind-logo",
+        kind: "brand-logo",
+        file: "mind-logo.png",
+        webp: "mind-logo.webp",
+        alt: "MIND logo, a raised mosaic-blue arm forming the letter I, with the words Minority, Indigenous, Nurturing Development underneath.",
+        caption: "The MIND logo"
+      }
+    ]
+  }
+];
+
+const SKETCHBOOK = [];
+
+
 
 const SERVICES = [
   "Social Media",
@@ -587,5 +714,5 @@ const SERVICES = [
 ];
 
 Object.assign(window, {
-  SITE, CATEGORIES, SET_LABEL, WORK, TOOLS, SKILLS, SERVICES, EXPERIENCE, EDUCATION, AWARDS, ASIDE, PHOTOGRAPHY, WORK_DIR, PHOTO_DIR
+  SITE, CATEGORIES, SET_LABEL, WORK, TOOLS, SKILLS, SERVICES, EXPERIENCE, EDUCATION, AWARDS, ASIDE, PHOTOGRAPHY, BRANDING, SKETCHBOOK, WORK_DIR, PHOTO_DIR, BRAND_DIR
 });

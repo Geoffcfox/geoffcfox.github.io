@@ -107,10 +107,12 @@ function initReveal() {
 function pieceMarkup(item, extra = "") {
   const href = `project.html?id=${encodeURIComponent(item.id)}`;
   const note = item.confidential ? `<p class="piece__note">Confidential</p>` : "";
+  const wide = item.wide ? " piece--wide" : "";
+  const dir = item.dir || WORK_DIR;
   return `
-    <a class="piece reveal ${extra}" href="${href}" data-open="${item.id}">
+    <a class="piece reveal ${extra}${wide}" href="${href}" data-open="${item.id}">
       <div class="piece__frame">
-        <img src="${WORK_DIR}${encodeURIComponent(item.file)}" alt="${escapeHtml(item.alt || item.title)}" loading="lazy">
+        ${pictureTag(dir, item)}
       </div>
       <div class="piece__label">
         ${note}
@@ -133,15 +135,25 @@ function currentList() {
 function renderLightbox() {
   const item = currentList()[lightbox.index];
   if (!item || !lightbox.el) return;
-  const isPhoto = item.kind === "photo";
-  const dir = isPhoto ? PHOTO_DIR : WORK_DIR;
-  const setLabel = isPhoto ? "Photography" : ((window.SET_LABEL && SET_LABEL[item.set]) || item.set || "");
+  const kind = item.kind || "";
+  const isPhoto = kind === "photo";
+  const isBrand = kind === "brand" || kind === "brand-logo";
+  const isSketch = kind === "sketch";
+  const dir = isPhoto ? PHOTO_DIR : isBrand ? (window.BRAND_DIR || "assets/images/branding/") : isSketch ? (window.SKETCH_DIR || "assets/images/sketchbook/") : WORK_DIR;
+  const setLabel = isPhoto
+    ? "Photography"
+    : isBrand
+      ? (item.projectTitle || "Logo and branding")
+      : isSketch
+        ? "Sketchbook"
+        : ((window.SET_LABEL && SET_LABEL[item.set]) || item.set || "");
   lightbox.setEl.textContent = setLabel + (item.confidential ? " · Confidential" : "");
-  lightbox.title.textContent = item.title || "";
-  lightbox.desc.textContent = item.caption || item.meta || "";
+  lightbox.title.textContent = item.title || item.caption || "";
+  lightbox.desc.textContent = item.pageCaption || ((item.caption && item.caption !== item.title) ? item.caption : (item.meta || ""));
   const img = document.createElement("img");
   img.src = dir + item.file;
   img.alt = item.alt || item.title || "";
+  lightbox.media.classList.toggle("lightbox__media--light", kind === "brand-logo");
   if (item.webp) {
     const pic = document.createElement("picture");
     const source = document.createElement("source");
@@ -154,9 +166,30 @@ function renderLightbox() {
   }
 }
 
+function workLightboxItems() {
+  const items = [];
+  for (const item of (window.WORK || [])) {
+    const pages = item.pages && item.pages.length ? item.pages : [null];
+    pages.forEach((page, i) => {
+      const entry = { ...item, sourceId: item.id };
+      if (page) {
+        entry.file = page.file || item.file;
+        entry.webp = page.webp || item.webp;
+        entry.alt = page.alt || item.alt;
+        entry.pageCaption = page.caption || "";
+        if (pages.length > 1 && !(pages.length === 1 && pages[0] === null)) {
+          entry.id = page.id || `${item.id}--${i}`;
+        }
+      }
+      items.push(entry);
+    });
+  }
+  return items;
+}
+
 function openLightboxFromList(list, id) {
   lightbox.list = list;
-  const index = list.findIndex((item) => item.id === id);
+  const index = list.findIndex((item) => item.id === id || item.sourceId === id);
   if (index < 0) return;
   lightbox.index = index;
   lightbox.lastFocus = document.activeElement;
@@ -195,8 +228,14 @@ function initLightbox() {
     const open = event.target.closest("[data-open]");
     if (open) {
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      const isPhoto = open.dataset.kind === "photo";
-      const list = isPhoto ? (window.PHOTOGRAPHY || []) : (window.WORK || []);
+      const kind = open.dataset.kind;
+      const list = kind === "photo"
+        ? (window.PHOTOGRAPHY || [])
+        : (kind === "brand" || kind === "brand-logo")
+          ? brandingAssets()
+          : kind === "sketch"
+            ? (window.SKETCHBOOK || [])
+            : workLightboxItems();
       event.preventDefault();
       openLightboxFromList(list, open.dataset.open);
       return;
@@ -361,6 +400,92 @@ function renderWork() {
   apply(activeSetFromUrl());
 }
 
+
+function brandingAssets() {
+  return (window.BRANDING || []).flatMap((project) =>
+    (project.assets || []).map((asset) => ({
+      ...asset,
+      projectTitle: project.title,
+      title: asset.caption || asset.title || project.title
+    }))
+  );
+}
+
+function renderBranding() {
+  const root = document.getElementById("branding-root");
+  if (!root) return;
+  const projects = window.BRANDING || [];
+  if (!projects.length) {
+    root.innerHTML = `
+      <div class="photo-empty">
+        <h2>Brand work is on the way.</h2>
+        <p>I will be adding logos and campaign pieces here.</p>
+      </div>`;
+    return;
+  }
+  const dir = window.BRAND_DIR || "assets/images/branding/";
+  root.innerHTML = projects.map((project) => {
+    const assets = project.assets || [];
+    const logo = assets.find((a) => a.kind === "brand-logo");
+    const others = assets.filter((a) => a !== logo);
+    const logoHtml = logo ? `
+      <figure class="brand-logo-panel reveal">
+        <button class="brand-logo-panel__btn" type="button" data-open="${escapeHtml(logo.id)}" data-kind="brand-logo" aria-label="Open ${escapeHtml(logo.caption || logo.title || "logo")}">
+          ${pictureTag(dir, logo)}
+        </button>
+        <figcaption>${escapeHtml(logo.caption || "Logo")}</figcaption>
+      </figure>` : "";
+    const artHtml = others.map((item) => `
+      <button class="piece reveal" type="button" data-open="${escapeHtml(item.id)}" data-kind="brand" aria-label="Open ${escapeHtml(item.caption || item.title || "artwork")}">
+        <div class="piece__frame">
+          ${pictureTag(dir, item)}
+        </div>
+        <div class="piece__label">
+          <h3>${escapeHtml(item.caption || item.title || "")}</h3>
+        </div>
+      </button>
+    `).join("");
+    return `
+      <article class="brand-case" id="${escapeHtml(project.id)}">
+        <header class="brand-case__head reveal">
+          <p class="kicker">Brand project</p>
+          <h2>${escapeHtml(project.title)}</h2>
+          <p class="lede">${escapeHtml(project.description || "")}</p>
+        </header>
+        ${logoHtml}
+        ${artHtml ? `<div class="brand-case__art">${artHtml}</div>` : ""}
+      </article>
+    `;
+  }).join("");
+}
+
+function renderSketchbook() {
+  const root = document.getElementById("sketch-root");
+  const empty = document.getElementById("sketch-empty");
+  if (!root && !empty) return;
+  const items = window.SKETCHBOOK || [];
+  if (!items.length) {
+    if (root) root.hidden = true;
+    if (empty) empty.hidden = false;
+    return;
+  }
+  if (empty) empty.hidden = true;
+  if (!root) return;
+  root.hidden = false;
+  const dir = window.SKETCH_DIR || "assets/images/sketchbook/";
+  root.innerHTML = items.map((item) => `
+    <button class="piece reveal" type="button" data-open="${escapeHtml(item.id)}" data-kind="sketch" aria-label="Open ${escapeHtml(item.title || "drawing")}">
+      <div class="piece__frame">
+        ${pictureTag(dir, item)}
+      </div>
+      <div class="piece__label">
+        <h3>${escapeHtml(item.title || "")}</h3>
+        <p>${escapeHtml(item.caption || "")}</p>
+      </div>
+    </button>
+  `).join("");
+}
+
 function renderPhotography() {
   const root = document.getElementById("photo-root");
   const empty = document.getElementById("photo-empty");
@@ -417,11 +542,27 @@ function renderProject() {
     setMeta("name", "description", item.caption);
     setMeta("property", "og:description", item.caption);
   }
+  const pages = item.pages && item.pages.length
+    ? item.pages
+    : [{ file: item.file, webp: item.webp, alt: item.alt }];
+  const stacked = item.stage === "stack" || pages.length > 2;
+  const stageClass = [
+    "project__stage",
+    pages.length > 1 ? "project__stage--pages" : "",
+    stacked ? "project__stage--pages-stack" : "",
+    item.wide ? "project__stage--wide" : ""
+  ].filter(Boolean).join(" ");
+
+  const stage = pages.map((page) => {
+    const pic = pictureTag(WORK_DIR, { ...item, file: page.file, webp: page.webp, alt: page.alt || item.alt });
+    const cap = page.caption ? `<figcaption>${escapeHtml(page.caption)}</figcaption>` : "";
+    return `<figure>${pic}${cap}</figure>`;
+  }).join("");
   root.innerHTML = `
     <div class="wrap project">
       <a class="project__back" href="work.html?set=${encodeURIComponent(item.set)}">← ${escapeHtml(set)}</a>
-      <div class="project__stage">
-        <img src="${WORK_DIR}${encodeURIComponent(item.file)}" alt="${escapeHtml(item.alt || item.title)}">
+      <div class="${stageClass}">
+        ${stage}
       </div>
       <div class="project__meta">
         <p class="kicker">${escapeHtml(set)}${item.confidential ? " · Confidential" : ""}</p>
@@ -521,6 +662,8 @@ function init() {
   renderHomePhotos();
   renderWork();
   renderPhotography();
+  renderBranding();
+  renderSketchbook();
   renderProject();
   renderAbout();
   initReveal();
