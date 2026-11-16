@@ -91,7 +91,7 @@ If the array is empty, the photography page shows a short ready state instead of
 
 ## Résumé
 
-`assets/Geoff-Fox-Resume.pdf` is a one-page résumé for download from the About page. It lists email, LinkedIn, Philadelphia, PA, and relocation. It does **not** include a phone number. If you replace this file, keep the phone off the public PDF.
+`assets/Geoff-Fox-Resume.pdf` is a one-page résumé for download from the About page. It lists email, LinkedIn, and Philadelphia, PA. It does **not** include a phone number. If you replace this file, keep the phone off the public PDF.
 
 ## Tools list
 

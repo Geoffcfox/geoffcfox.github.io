@@ -18,7 +18,6 @@ const SITE = {
   name: "Geoff Fox",
   role: "Creative Marketing & Brand Strategist",
   city: "Philadelphia, PA",
-  relocation: "Open to relocation",
   email: "Foxgeoffbusiness@gmail.com",
   linkedin: "https://www.linkedin.com/in/geoffrey-fox/",
   /* Set this to the live origin once the site is hosted, with no trailing slash.
@@ -194,26 +193,6 @@ const WORK = [
         caption: "Back"
       }
     ]
-  },
-  {
-    id: "golf-outing-flyer",
-    title: "Charity golf outing",
-    meta: "Invitation / flyer",
-    set: "circulation",
-    featured: true,
-    file: "golf-outing-flyer.jpg",
-    alt: "Flyer for a charity golf outing, designed by Geoff Fox.",
-    caption: "A print invitation for an annual outing, with the schedule, the sponsors, and a reason to come."
-  },
-  {
-    id: "save-the-date",
-    title: "Save the date",
-    meta: "Golf outing",
-    set: "circulation",
-    featured: false,
-    file: "save-the-date.jpg",
-    alt: "Save-the-date card for a charity golf outing, designed by Geoff Fox.",
-    caption: "The first piece in the outing sequence: a date, a place, and a tone."
   },
   {
     id: "intern-welcome-board",
